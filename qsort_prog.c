@@ -89,6 +89,7 @@ void generation_array(int N, long long int a[])
 static void help_print(void)
 {
     printf("Программа: Экспериментальное сравнение методов сортировки\nОписание:\n\n");
+    printf("Программа написал студент 105 группы Ходорыч Антон Сергеевич\n");
     printf("Программа реализует методы сортировки массивов 64-разрядных целых чисел.\n");
     printf("Сортировка выполняется по неубыванию модулей элементов.\n");
     printf("Последовательность параметров  -H  -N  -T  -M  -S  -P\n");
@@ -98,9 +99,6 @@ static void help_print(void)
     printf("    1   - Элементы уже упорядочены\n");
     printf("    2   - Элементы упорядочены в обратном порядке\n");
     printf("    3,4 - Расстановка элементов случайна\n\n");
-    printf("    -M, --method       Метод сравнения\n");
-    printf("    1   - Быстрая сортировка\n");
-    printf("    2   - Пирамидальная сортировка\n\n");
     printf("    -S, --seed      Введите экземпляр массива\n\n");
     printf("    1   - Массив №1\n");
     printf("    2   - Массив №2\n");
@@ -108,12 +106,6 @@ static void help_print(void)
     printf("    3   - Массив №4\n\n");    
     printf("    -N, --number      Введите чилсо элементов массива\n");
     printf("    -P, --print       Вывод указанного количества элементов массивов в исходном и кончном состояни\n");
-
-
-
-
-
-
 }
 
 int main(int argc, char* argv[])
@@ -131,7 +123,12 @@ int main(int argc, char* argv[])
     long long int arr_100[100];
 
     
-
+    if(strlen(argb) <= 1)
+    {
+        fprintf(stderr, "\nОшибка: недостаточное количество параметров\n");
+        help_print();
+        return 0;
+    }
     /* узнаем фргумент командной строки*/
     for(int i = 1; i < argc; ++i){
         if(strcmp(argv[i], "-H") == 0 || strcmp(argv[i], "--help") == 0)
@@ -140,10 +137,14 @@ int main(int argc, char* argv[])
             break;
         }else if(strcmp(argv[i], "-N=") == 0 || strcmp(argv[i], "--number=") == 0){
             num_indx = atoi(argv[++i]);
+            if(num_indx < 1)
+            {
+                fprintf(stderr, "/nОшибка: неверное значание параметра\n");
+                help_print();
+                break;
+            }
         }else if(strcmp(argv[i], "-T=") == 0 || strcmp(argv[i], "--type=") == 0){
             type_indx = atoi(argv[++i]);
-        }else if(strcmp(argv[i], "-M=") == 0 || strcmp(argv[i], "--method=") == 0){
-            method_indx = atoi(argv[++i]);
         }else if(strcmp(argv[i], "-S=") == 0 || strcmp(argv[i], "--seed=") == 0){
             seed_indx = atoi(argv[++i]);
         }else if(strcmp(argv[i], "-P=") == 0 || strcmp(argv[i], "--print=") == 0){

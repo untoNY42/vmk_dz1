@@ -6,8 +6,8 @@
 
 long long int cmp1 = 0, cmp2 = 0; //счетчик сравнения 
 long long int swap1 = 0, swap2 = 0; //счетчик обменов
-//int Gen_type = 0;   //глобальная переменная для типа генерации
 
+/*вспомогательная функци для быстрой сортировки*/
 static void qsort_abs(long long int a[], int l, int r)
 {
     int i = l, j = r;   //левая и правая граница
@@ -186,34 +186,38 @@ void generation_array(int N, long long int a[], int type)
     }
 }
 
+/*справочная информация*/
 static void help_print(void)
 {
     printf("Программа: Экспериментальное сравнение методов сортировки\nОписание:\n\n");
-    printf("Программу написал студент 105 группы Ходорыч Антон Сергеевич\n");
+    printf("Программу написал студент 105 группы Ходорыч Антон Сергеевич.\n");
     printf("Программа реализует методы сортировки массивов 64-разрядных целых чисел.\n");
     printf("Сортировка выполняется по неубыванию модулей элементов.\n");
-    printf("Последовательность параметров  -H  -N  -T -P -C -W\n");
     printf("\nКлючи командной строки:\n");
-    printf("Для успешного запуска команды необходимо указать значения для каждого параметра, кроме параметра -H\n");
-    printf("Примеры корректного использования параметров:\n");
-
-
-    printf("    -H, --help      Вывод этой справки и завершение работы.\n");
-    printf("    -T, --type      Тип генерации массива.\n");
-    printf("    1   - Элементы уже упорядочены\n");
-    printf("    2   - Элементы упорядочены в обратном порядке\n");
-    printf("    3,4 - Расстановка элементов случайна\n\n");
+    printf("Для успешного запуска программы необходимо указать значения для каждого ключа, кроме ключа, отвечающего за вывод справочной информации.\n");
+    printf("Для вывода справочной информации укажите только один ключ -H или --help\n");
+    printf("Примеры корректного использования ключей:\n\n");
+    printf("-N 5 -T 2 -P 5 -C 1 -W 1\n");
+    printf("-N 1000 -T 3 -P 0 -C 0 -W 1\n");
+    printf("-N 3 -T 4 -P 0 -C 0 -W 0\n");
+    printf("--H\n");
+    printf("--help\n");
+    printf("--number 7 -T 1 -P 4 -C 0 -W 0\n");
+    printf("\n\n");
+    printf("    -H, --help      Вывод данной информации и завершение работы.\n");
     printf("    -N, --number      Введите чилсо элементов массива\n");
+    printf("    -T, --type      Тип генерации массива.\n");
+    printf("        1   - Элементы уже упорядочены\n");
+    printf("        2   - Элементы упорядочены в обратном порядке\n");
+    printf("        3,4 - Расстановка элементов случайна\n\n");
     printf("    -P, --print       Вывод указанного количества элементов массивов в исходном и кончном состояни\n");
     printf("                      Если вывод не трубуеться, укажите значение 0\n");
-    printf("    -C, --counter     Вывод числа сравнений для:\n");
-    printf("     1  - Быстрой сортировки\n");
-    printf("     2  - Пирамидальной сортировки\n");
-    printf("     0  - Вывод не нужен\n\n");
-    printf("    -W, --swap        Вывод числа перемещений для:\n");
-    printf("     1  - Быстрой сортировки\n");
-    printf("     2  - Пирамидальной сортировки\n");
-    printf("     0  - Вывод не нужен\n\n");
+    printf("    -C, --counter     Вывод числа сравнений\n");
+    printf("        1  - Вывод нужен\n");
+    printf("        0  - Вывод не нужен\n\n");
+    printf("    -W, --swap        Вывод числа перемещений\n");
+    printf("        1  - Вывод нужен\n");
+    printf("        0  - Вывод не нужен\n\n");
 
 
 }
@@ -226,6 +230,7 @@ int main(int argc, char* argv[])
     int cnt_indx = 0;
     int swp_indx = 0;
     long long int *arr;
+
 
     if(strcmp(argv[1], "-H") == 0 || strcmp(argv[1], "--help") == 0)
     {
@@ -241,9 +246,9 @@ int main(int argc, char* argv[])
         help_print();
         return 0;
     }
-    /* узнаем фргумент командной строки*/
+    /* узнаем ключ из командной строки*/
     for(int i = 1; i < argc; ++i){
-        if(strcmp(argv[i], "-N=") == 0 || strcmp(argv[i], "--number=") == 0){
+        if(strcmp(argv[i], "-N") == 0 || strcmp(argv[i], "--number") == 0){
             num_indx = atoi(argv[++i]);
             if(num_indx < 1)
             {
@@ -251,7 +256,7 @@ int main(int argc, char* argv[])
                 help_print();
                 exit(1);
             }
-        }else if(strcmp(argv[i], "-T=") == 0 || strcmp(argv[i], "--type=") == 0){
+        }else if(strcmp(argv[i], "-T") == 0 || strcmp(argv[i], "--type") == 0){
             type_indx = atoi(argv[++i]);
             if(type_indx < 1 || type_indx > 4)
             {
@@ -259,15 +264,21 @@ int main(int argc, char* argv[])
                 help_print();
                 exit(1);
             }
-        }else if(strcmp(argv[i], "-P=") == 0 || strcmp(argv[i], "--print=") == 0){
+        }else if(strcmp(argv[i], "-P") == 0 || strcmp(argv[i], "--print") == 0){
             print_indx = atoi(argv[++i]);
-            if(print_indx <= 0)
+            if(print_indx < 0)
             {
                 fprintf(stderr, "\nОшибка: неверное значение параметра -P\n");
                 help_print();
                 exit(1);
             }
-        }else if(strcmp(argv[i], "-C=") == 0 || strcmp(argv[i], "--counter=") == 0){
+            if(print_indx > num_indx)
+            {
+                fprintf(stderr, "\nОшибка: в массиве содержиться только %d элементов", num_indx);
+                help_print();
+                exit(1);
+            }
+        }else if(strcmp(argv[i], "-C") == 0 || strcmp(argv[i], "--counter") == 0){
             cnt_indx = atoi(argv[++i]);
             if(cnt_indx < 0 || cnt_indx > 2)
             {
@@ -275,7 +286,7 @@ int main(int argc, char* argv[])
                 help_print();
                 exit(1);
             }
-        }else if(strcmp(argv[i], "-W=") == 0 || strcmp(argv[i], "--swap=") == 0){
+        }else if(strcmp(argv[i], "-W") == 0 || strcmp(argv[i], "--swap") == 0){
             swp_indx = atoi(argv[++i]);
             if(swp_indx < 0 || swp_indx > 2)
             {
@@ -286,8 +297,6 @@ int main(int argc, char* argv[])
         }
     }
 
-    //Gen_type = type_indx;
-    //printf("%d %d %d", num_indx,type_indx, print_indx);
 
     /*инициализация генератора случайных чисел*/
     srand(time(NULL));
@@ -304,13 +313,13 @@ int main(int argc, char* argv[])
     generation_array(num_indx, arr, type_indx);
 
     if(print_indx)
-        printf("\nИсходный массив из %d элементов: \n", print_indx); 
+        printf("\n\nПервые %d элемента исходного массива: \n\n", print_indx); 
 
     for(int i = 0; i < print_indx; ++i)
     {
         printf("%lld ", arr[i]);
         if((i != 0) && (i % 10 == 0))
-            printf("\n");
+            printf("\n\n");
     }
 
     /*сбрасываем счетчики*/
@@ -324,36 +333,25 @@ int main(int argc, char* argv[])
     heapsort(num_indx, arr);
 
     if(print_indx)
-        printf("\nОтсортированный массив из %d элементов: \n", print_indx); 
+        printf("\n\nПервые %d элемента отсортированного массива: \n\n", print_indx); 
 
     for(int i = 0; i < print_indx; ++i)
     {
         printf("%lld ", arr[i]);
         if((i != 0) && (i % 10 == 0))
-            printf("\n");
+            printf("\n\n");
     }
 
     if(cnt_indx)
     {
-        if(cnt_indx == 1)
-        {
-            printf("\nчисло сравнений в быстрой сортировке: %lld\n", cmp1);
-        }
-        if(cnt_indx == 2){
-            printf("\nчисло сравнений в пирамидальной сортировке: %lld\n", cmp2);
-        }
+        printf("\nчисло сравнений в быстрой сортировке: %lld\n", cmp1);
+        printf("\nчисло сравнений в пирамидальной сортировке: %lld\n", cmp2);
     }
 
     if(swp_indx)
     {
-        if(swp_indx == 1)
-        {
-            printf("\nчисло обменов в быстрой сортировке: %lld\n", swap1);
-        }
-        if(swp_indx == 2)
-        {
-            printf("\nчисло обменов в пирамидальной сортировке: %lld\n", swap2);
-        }
+        printf("\nчисло обменов в быстрой сортировке: %lld\n", swap1);
+        printf("\nчисло обменов в пирамидальной сортировке: %lld\n", swap2);
     }
 
     

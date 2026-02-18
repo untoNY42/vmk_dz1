@@ -192,9 +192,12 @@ static void help_print(void)
     printf("Программу написал студент 105 группы Ходорыч Антон Сергеевич\n");
     printf("Программа реализует методы сортировки массивов 64-разрядных целых чисел.\n");
     printf("Сортировка выполняется по неубыванию модулей элементов.\n");
-    printf("Последовательность параметров  -H  -N  -T -P -S -C -W\n");
+    printf("Последовательность параметров  -H  -N  -T -P -C -W\n");
     printf("\nКлючи командной строки:\n");
-    printf("Для успешного запуска команды необходимо указать значения для каждого параметра\n");
+    printf("Для успешного запуска команды необходимо указать значения для каждого параметра, кроме параметра -H\n");
+    printf("Примеры корректного использования параметров:\n");
+
+
     printf("    -H, --help      Вывод этой справки и завершение работы.\n");
     printf("    -T, --type      Тип генерации массива.\n");
     printf("    1   - Элементы уже упорядочены\n");
@@ -224,8 +227,15 @@ int main(int argc, char* argv[])
     int swp_indx = 0;
     long long int *arr;
 
+    if(strcmp(argv[1], "-H") == 0 || strcmp(argv[1], "--help") == 0)
+    {
+        {
+            help_print();
+            exit(0);
+        }
+    }
     
-    if(argc != 13 || (strcmp(argv[1], "-H") == 1  && strcmp(argv[1], "--help") == 1))
+    if(argc!= 11)
     {
         fprintf(stderr, "\nОшибка: неверноое количество параметров.  Корректное количество параметров - 12\n");
         help_print();
@@ -233,11 +243,7 @@ int main(int argc, char* argv[])
     }
     /* узнаем фргумент командной строки*/
     for(int i = 1; i < argc; ++i){
-        if(strcmp(argv[i], "-H") == 0 || strcmp(argv[i], "--help") == 0)
-        {
-            help_print();
-            exit(0);
-        }else if(strcmp(argv[i], "-N=") == 0 || strcmp(argv[i], "--number=") == 0){
+        if(strcmp(argv[i], "-N=") == 0 || strcmp(argv[i], "--number=") == 0){
             num_indx = atoi(argv[++i]);
             if(num_indx < 1)
             {
@@ -303,7 +309,7 @@ int main(int argc, char* argv[])
     for(int i = 0; i < print_indx; ++i)
     {
         printf("%lld ", arr[i]);
-        if(i % 10 == 0)
+        if((i != 0) && (i % 10 == 0))
             printf("\n");
     }
 
@@ -323,7 +329,7 @@ int main(int argc, char* argv[])
     for(int i = 0; i < print_indx; ++i)
     {
         printf("%lld ", arr[i]);
-        if(i % 10 == 0)
+        if((i != 0) && (i % 10 == 0))
             printf("\n");
     }
 

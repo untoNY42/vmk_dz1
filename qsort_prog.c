@@ -230,6 +230,7 @@ int main(int argc, char* argv[])
     int cnt_indx = 0;
     int swp_indx = 0;
     long long int *arr;
+    long long int* copy_arr;
 
 
     if(strcmp(argv[1], "-H") == 0 || strcmp(argv[1], "--help") == 0)
@@ -305,12 +306,27 @@ int main(int argc, char* argv[])
     arr = malloc(num_indx * sizeof(long long int));
     if(arr == NULL)
     {
-        fprintf(stderr, "\nОшибка выделения памяти для массива\n");
+        fprintf(stderr, "\nОшибка выделения памяти для массива arr\n");
         exit(0);
     }
 
+    copy_arr = malloc(num_indx*sizeof(long long int));
+    if(copy_arr == NULL)
+    {
+        fprintf(stderr, "\nОшибка выделения памяти для массива copy_arr\n");
+        exit(0);
+    }
+
+    
+
     /*создаем массив*/
     generation_array(num_indx, arr, type_indx);
+
+    /*копируем массив*/
+    for(int  i = 0; i < num_indx; ++i)
+    {
+        copy_arr[i] = arr[i];
+    }
 
     if(print_indx)
         printf("\n\nПервые %d элемента исходного массива: \n\n", print_indx); 
@@ -330,7 +346,7 @@ int main(int argc, char* argv[])
     q_abs(num_indx, arr);
 
     /*пирамидальная*/
-    heapsort(num_indx, arr);
+    heapsort(num_indx, copy_arr);
 
     if(print_indx)
         printf("\n\nПервые %d элемента отсортированного массива: \n\n", print_indx); 
@@ -358,6 +374,9 @@ int main(int argc, char* argv[])
 
     free(arr);
     arr = NULL;
+
+    free(copy_arr);
+    copy_arr = NULL;
 
     return 0;
 }

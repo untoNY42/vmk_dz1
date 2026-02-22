@@ -205,19 +205,19 @@ static void help_print(void)
     printf("--number 7 -T 1 -P 4 -C 0 -W 0\n");
     printf("\n\n");
     printf("    -H, --help      Вывод данной информации и завершение работы.\n");
-    printf("    -N, --number      Введите чилсо элементов массива\n");
+    printf("    -N, --number      Введите чилсо элементов массива.\n");
     printf("    -T, --type      Тип генерации массива.\n");
-    printf("        1   - Элементы уже упорядочены\n");
-    printf("        2   - Элементы упорядочены в обратном порядке\n");
-    printf("        3,4 - Расстановка элементов случайна\n\n");
-    printf("    -P, --print       Вывод указанного количества элементов массивов в исходном и кончном состояни\n");
-    printf("                      Если вывод не трубуеться, укажите значение 0\n");
-    printf("    -C, --counter     Вывод числа сравнений\n");
-    printf("        1  - Вывод нужен\n");
-    printf("        0  - Вывод не нужен\n\n");
-    printf("    -W, --swap        Вывод числа перемещений\n");
-    printf("        1  - Вывод нужен\n");
-    printf("        0  - Вывод не нужен\n\n");
+    printf("        1   - Элементы уже упорядочены.\n");
+    printf("        2   - Элементы упорядочены в обратном порядке.\n");
+    printf("        3,4 - Расстановка элементов случайна.\n\n");
+    printf("    -P, --print       Вывод указанного количества элементов массивов в исходном и конечном состояни.\n");
+    printf("                      Если вывод не трубуеться, укажите значение 0.\n");
+    printf("    -C, --counter     Вывод числа сравнений.\n");
+    printf("        1  - Вывод нужен.\n");
+    printf("        0  - Вывод не нужен.\n\n");
+    printf("    -W, --swap        Вывод числа перемещений.\n");
+    printf("        1  - Вывод нужен.\n");
+    printf("        0  - Вывод не нужен.\n\n");
 
 
 }
@@ -243,9 +243,9 @@ int main(int argc, char* argv[])
     
     if(argc!= 11)
     {
-        fprintf(stderr, "\nОшибка: неверноое количество параметров.  Корректное количество параметров - 12\n");
-        help_print();
-        return 0;
+        fprintf(stderr, "\nОшибка: неверноое количество параметров.\n");
+        //help_print();
+        exit(1);
     }
     /* узнаем ключ из командной строки*/
     for(int i = 1; i < argc; ++i){
@@ -254,7 +254,7 @@ int main(int argc, char* argv[])
             if(num_indx < 1)
             {
                 fprintf(stderr, "\nОшибка: неверное значание параметра -N\n");
-                help_print();
+                //help_print();
                 exit(1);
             }
         }else if(strcmp(argv[i], "-T") == 0 || strcmp(argv[i], "--type") == 0){
@@ -262,7 +262,7 @@ int main(int argc, char* argv[])
             if(type_indx < 1 || type_indx > 4)
             {
                 fprintf(stderr, "\nОшибка: неверный диапазон значений параметра -T\n");
-                help_print();
+                //help_print();
                 exit(1);
             }
         }else if(strcmp(argv[i], "-P") == 0 || strcmp(argv[i], "--print") == 0){
@@ -270,13 +270,13 @@ int main(int argc, char* argv[])
             if(print_indx < 0)
             {
                 fprintf(stderr, "\nОшибка: неверное значение параметра -P\n");
-                help_print();
+                //help_print();
                 exit(1);
             }
             if(print_indx > num_indx)
             {
                 fprintf(stderr, "\nОшибка: в массиве содержиться только %d элементов", num_indx);
-                help_print();
+                //help_print();
                 exit(1);
             }
         }else if(strcmp(argv[i], "-C") == 0 || strcmp(argv[i], "--counter") == 0){
@@ -284,7 +284,7 @@ int main(int argc, char* argv[])
             if(cnt_indx < 0 || cnt_indx > 2)
             {
                 fprintf(stderr, "\nОшибка: невверное значения параметра -C\n");
-                help_print();
+                //help_print();
                 exit(1);
             }
         }else if(strcmp(argv[i], "-W") == 0 || strcmp(argv[i], "--swap") == 0){
@@ -292,7 +292,7 @@ int main(int argc, char* argv[])
             if(swp_indx < 0 || swp_indx > 2)
             {
                 fprintf(stderr, "\nОшибка: невверное значения параметра -W\n");
-                help_print();
+                //help_print();
                 exit(1);
             } 
         }

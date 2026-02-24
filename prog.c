@@ -336,6 +336,8 @@ int main(int argc, char* argv[])
         printf("%lld ", arr[i]);
         if((i != 0) && (i % 10 == 0))
             printf("\n\n");
+        if(i == print_indx - 1)
+                printf("\n");
     }
 
     /*сбрасываем счетчики*/
@@ -356,6 +358,8 @@ int main(int argc, char* argv[])
         printf("%lld ", arr[i]);
         if((i != 0) && (i % 10 == 0))
             printf("\n\n");
+        if(i == print_indx - 1)
+            printf("\n");
     }
 
     if(cnt_indx)

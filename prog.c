@@ -307,14 +307,14 @@ int main(int argc, char* argv[])
     if(arr == NULL)
     {
         fprintf(stderr, "\nОшибка выделения памяти для массива arr\n");
-        exit(0);
+        exit(1);
     }
 
     copy_arr = malloc(num_indx*sizeof(long long int));
     if(copy_arr == NULL)
     {
         fprintf(stderr, "\nОшибка выделения памяти для массива copy_arr\n");
-        exit(0);
+        exit(1);
     }
 
     

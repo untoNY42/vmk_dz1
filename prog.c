@@ -1,8 +1,16 @@
+/*
+Ходорыч Антон Сергеевич, 105
+Вариант: 2, 3, 4, 5.
+Программа:
+Программа реализует методы сортировки массивов 64-разрядных целых чисел.
+Сортировка выполняется по неубыванию модулей элементов.
+Реализованны быстрая(рекурсивный метод) и пирамидальная сортировка.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <limits.h>
 
 long long int cmp1 = 0, cmp2 = 0; //счетчик сравнения 
 long long int swap1 = 0, swap2 = 0; //счетчик обменов
@@ -193,16 +201,20 @@ static void help_print(void)
     printf("Программу написал студент 105 группы Ходорыч Антон Сергеевич.\n");
     printf("Программа реализует методы сортировки массивов 64-разрядных целых чисел.\n");
     printf("Сортировка выполняется по неубыванию модулей элементов.\n");
+    printf("Два метода сортировки: пирамидальная и быстрая(рекурсивный метод).\n");
     printf("\nКлючи командной строки:\n");
     printf("Для успешного запуска программы необходимо указать значения для каждого ключа, кроме ключа, отвечающего за вывод справочной информации.\n");
     printf("Для вывода справочной информации укажите только один ключ -H или --help\n");
     printf("Примеры корректного использования ключей:\n\n");
-    printf("-N 5 -T 2 -P 5 -C 1 -W 1\n");
-    printf("-N 1000 -T 3 -P 0 -C 0 -W 1\n");
-    printf("-N 3 -T 4 -P 0 -C 0 -W 0\n");
-    printf("--H\n");
-    printf("--help\n");
-    printf("--number 7 -T 1 -P 4 -C 0 -W 0\n");
+    printf("перед вводом ключей выполните: gcc prog.c -o a\n");
+    printf("./a -N 5 -T 2 -P 5 -C 1 -W 1\n");
+    printf("./a -N 1000 -T 3 -P 0 -C 0 -W 1\n");
+    printf("./a -N 3 -T 4 -P 0 -C 0 -W 0\n");
+    printf("./a -H\n");
+    printf("./a --help\n");
+    printf("./a --number 7 -T 1 -P 4 -C 0 -W 0\n");
+    printf("./a -T 1 -P 4 -C 0 -W 0 -N 5\n");
+    printf("./a -P 1 -T 4 -W 0 -C 0 -N 5\n");
     printf("\n\n");
     printf("    -H, --help      Вывод данной информации и завершение работы.\n");
     printf("    -N, --number      Введите чилсо элементов массива.\n");
@@ -232,18 +244,21 @@ int main(int argc, char* argv[])
     long long int *arr;
     long long int* copy_arr;
 
-
-    if(strcmp(argv[1], "-H") == 0 || strcmp(argv[1], "--help") == 0)
+    if(argc == 1)
     {
-        {
-            help_print();
-            exit(0);
-        }
+        fprintf(stderr, "\nОшибка: нельзя запусить программу без дополнительных ключей. Для вывода справочной информации укажите ключ -H или --help.\n");
+        exit(1);
+    }
+
+    if(argc > 1 && (strcmp(argv[1], "-H") == 0 || strcmp(argv[1], "--help") == 0))
+    {
+        help_print();
+        exit(0);
     }
     
     if(argc!= 11)
     {
-        fprintf(stderr, "\nОшибка: неверноое количество параметров.\n");
+        fprintf(stderr, "\nОшибка: неверноое количество параметров. Для вывода справочной информации укажите ключ -H или --help.\n");
         //help_print();
         exit(1);
     }
@@ -253,7 +268,7 @@ int main(int argc, char* argv[])
             num_indx = atoi(argv[++i]);
             if(num_indx < 1)
             {
-                fprintf(stderr, "\nОшибка: неверное значание параметра -N\n");
+                fprintf(stderr, "\nОшибка: неверное значание параметра -N.\n");
                 //help_print();
                 exit(1);
             }
@@ -261,7 +276,7 @@ int main(int argc, char* argv[])
             type_indx = atoi(argv[++i]);
             if(type_indx < 1 || type_indx > 4)
             {
-                fprintf(stderr, "\nОшибка: неверный диапазон значений параметра -T\n");
+                fprintf(stderr, "\nОшибка: неверный диапазон значений параметра -T.\n");
                 //help_print();
                 exit(1);
             }
@@ -269,34 +284,36 @@ int main(int argc, char* argv[])
             print_indx = atoi(argv[++i]);
             if(print_indx < 0)
             {
-                fprintf(stderr, "\nОшибка: неверное значение параметра -P\n");
-                //help_print();
-                exit(1);
-            }
-            if(print_indx > num_indx)
-            {
-                fprintf(stderr, "\nОшибка: в массиве содержиться только %d элементов", num_indx);
+                fprintf(stderr, "\nОшибка: неверное значение параметра -P.\n");
                 //help_print();
                 exit(1);
             }
         }else if(strcmp(argv[i], "-C") == 0 || strcmp(argv[i], "--counter") == 0){
             cnt_indx = atoi(argv[++i]);
-            if(cnt_indx < 0 || cnt_indx > 2)
+            if(cnt_indx < 0 || cnt_indx > 1)
             {
-                fprintf(stderr, "\nОшибка: невверное значения параметра -C\n");
+                fprintf(stderr, "\nОшибка: неверное значение параметра -C.\n");
                 //help_print();
                 exit(1);
             }
         }else if(strcmp(argv[i], "-W") == 0 || strcmp(argv[i], "--swap") == 0){
             swp_indx = atoi(argv[++i]);
-            if(swp_indx < 0 || swp_indx > 2)
+            if(swp_indx < 0 || swp_indx > 1)
             {
-                fprintf(stderr, "\nОшибка: невверное значения параметра -W\n");
+                fprintf(stderr, "\nОшибка: неверное значение параметра -W.\n");
                 //help_print();
                 exit(1);
             } 
         }
     }
+
+    if(print_indx > num_indx)
+    {
+        fprintf(stderr, "\nОшибка: в массиве содержиться только %d элементов\n", num_indx);
+        //help_print();
+        exit(1);
+    }
+    
 
 
     /*инициализация генератора случайных чисел*/
@@ -329,7 +346,7 @@ int main(int argc, char* argv[])
     }
 
     if(print_indx)
-        printf("\n\nПервые %d элемента исходного массива: \n\n", print_indx); 
+        printf("\n\nПервые %d элемента(ов) исходного массива: \n\n", print_indx); 
 
     for(int i = 0; i < print_indx; ++i)
     {
@@ -351,7 +368,7 @@ int main(int argc, char* argv[])
     heapsort(num_indx, copy_arr);
 
     if(print_indx)
-        printf("\n\nПервые %d элемента отсортированного массива: \n\n", print_indx); 
+        printf("\n\nПервые %d элемента(ов) отсортированного массива: \n\n", print_indx); 
 
     for(int i = 0; i < print_indx; ++i)
     {
